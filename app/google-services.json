@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "68255243973",
+    "project_id": "timetracker-c99a1"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:68255243973:android:174e1316217cdd0c",
+        "android_client_info": {
+          "package_name": "com.tpu.mobile.timetracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "68255243973-9h8rb8mq10kq00a2830eetktipe1miab.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "68255243973-9kfdj49p8cnpgaitvcjv17591umssoi9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tpu.mobile.timetracker",
+            "certificate_hash": "e054cd8008b7ef8d2d491a2b897a6e7a217f00d3"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwSOzYYd_UxH7Cei-LemU__GycZ0h_0eU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

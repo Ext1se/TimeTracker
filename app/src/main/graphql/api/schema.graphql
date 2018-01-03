@@ -1,0 +1,110 @@
+query getWorkspace($id: String!, $ownerId: String!){
+  workspace(id: $id, ownerId: $ownerId){
+    id, name, description, crdate
+  }
+}
+
+query getWorkspaces($ownerId: String!){
+  workspaces(ownerId: $ownerId){
+    id, name, description, crdate
+  }
+}
+
+query getProject($ownerId: String!, $projectId: String!){
+  workspaces(ownerId: $ownerId){
+    project(id: $projectId){
+      id, name, crdate, color
+    }
+  }
+}
+
+query getProjects($ownerId: String!){
+  workspaces(ownerId: $ownerId){
+    id, projects{
+      id, name, crdate, color
+    }
+  }
+}
+
+query getTasks($ownerId: String!)
+{
+  workspaces(ownerId: $ownerId){
+    id, projects{
+      id, tasks{
+        id, name, description, crdate, timeEntries
+        {
+          id, crdate, duration, endDate, startDate
+        }
+      }
+    }
+  }
+}
+
+mutation authUser($token: String!){
+  auth(token: $token){
+    id, name, username, email
+  }
+}
+
+mutation createUser($user: UserInput!) {
+  createUser(user: $user)
+}
+
+mutation createWorkspace($workspace: WorkspaceInput!) {
+  createWorkspace(workspace: $workspace)
+}
+
+mutation removeWorkspace($id: String!){
+  removeWorkspace(id: $id)
+}
+
+mutation updateWorkspace($id: String!, $workspace: WorkspaceInput!){
+  updateWorkspace(id: $id, workspace: $workspace)
+}
+
+mutation createProject($wsId: String!, $project: ProjectInput!) {
+  createProject(wsId: $wsId, project: $project)
+}
+
+mutation updateProject($projId: String!, $project: ProjectInput!){
+  updateProject(projId: $projId, project: $project)
+}
+
+mutation removeProject($id: String!){
+  removeProject(id: $id)
+}
+
+mutation createTask($projId: String!, $task: TaskInput!) {
+  createTask(projId: $projId, task: $task)
+}
+
+mutation updateTask($id: String!, $task: TaskInput!)
+{
+  updateTask(id: $id, task: $task)
+}
+
+mutation removeTask($id: String!)
+{
+  removeTask(id: $id)
+}
+
+mutation startTask($taskId: String!)
+{
+  startTask(taskId: $taskId)
+  {
+    id, crdate, duration, endDate, startDate
+  }
+}
+
+mutation stopTimeEntry($id: String!)
+{
+  stopTimeEntry(id: $id)
+  {
+    id, crdate, duration, endDate, startDate
+  }
+}
+
+mutation updateTimeEntry($id: String!, $timeEntry: TimeEntryInput!)
+{
+  updateTimeEntry(id: $id, timeEntry: $timeEntry)
+}

@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">TimeTracker</string>
+    <string name="server_client_id">68255243973-9h8rb8mq10kq00a2830eetktipe1miab.apps.googleusercontent.com</string>
+    <string name="server_url">https://tttpu.tk/graphql</string>
+    <!--Authorization-->
+    <string name="authorization_hint">Select the Google Account</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="dialog_name">Name:</string>
+    <string name="dialog_description">Description:</string>
+    
+    <string name="drawer_menu_workspaces">Workspaces</string>
+    <string name="drawer_menu_projects">Projects</string>
+    <string name="drawer_menu_tasks">Tasks</string>
+    <string name="drawer_menu_reports">Reports</string>
+    <string name="drawer_menu_friends">Friends</string>
+    <string name="drawer_menu_settings">Settings</string>
+    <string name="drawer_menu_logout">Log out</string>
+
+
+    <!--ProjectInfo-->
+    <string name="project_info_name">Name:</string>
+    <string name="project_info_description">Description:</string>
+    <string name="project_info_workspace">Workspace:</string>
+    <string name="project_info_tasks">Tasks:</string>
+    <string name="project_info_start">Start:</string>
+    <string name="project_info_end">End:  </string>
+    <string name="project_info_duration">Duration:</string>
+</resources>

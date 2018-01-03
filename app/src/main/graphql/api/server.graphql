@@ -1,0 +1,117 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    workspace(id: String!, ownerId: String!) : Workspace
+    workspaces(ownerId: String!) : [Workspace]!
+    user(id: String!) : User
+}
+
+type Workspace {
+    id: String!
+    crdate: String!
+    name: String
+    ownerId: String!
+    description: String
+
+    project(id: String!): Project
+    projects: [Project]
+    timeEntries: [TimeEntry]
+}
+
+type Project {
+    id: String!
+    crdate: String!
+    name: String!
+    description: String
+    color: Int
+
+    task(id: String!): Task
+    tasks: [Task]
+    timeEntries: [TimeEntry]
+}
+
+type Task {
+    id: String!
+    crdate: String!
+    description: String
+    name: String
+
+    timeEntry(id: String!): TimeEntry
+    timeEntries: [TimeEntry]
+}
+
+type TimeEntry {
+    id: String!
+    crdate: String!
+    duration: Int
+    endDate: String
+    startDate: String
+}
+
+type User {
+    id: String!
+    crdate: String!
+    username: String!
+    name: String
+    email: String!
+}
+
+type Mutation {
+    auth(token: String!): User!
+    createUser(user: UserInput!): String!
+
+    # @return wsID
+    createWorkspace(workspace: WorkspaceInput!): String!
+    updateWorkspace(id: String!, workspace: WorkspaceInput!): Boolean!
+    removeWorkspace(id: String!): Boolean!
+
+    # @return projID
+    createProject(wsId: String!, project: ProjectInput!): String!
+    updateProject(projId: String!, project: ProjectInput!): Boolean!
+    removeProject(id: String!): Boolean!
+
+    # @return taskID
+    createTask(projId: String!, task: TaskInput!): String!
+    updateTask(id: String!, task: TaskInput!): Boolean!
+    removeTask(id: String!): Boolean!
+
+    startTask(taskId: String!): TimeEntry!
+    stopTimeEntry(id: String!): TimeEntry!
+    updateTimeEntry(id: String!, timeEntry: TimeEntryInput!): Boolean!
+    removeTimeEntry(id: String!): Boolean!
+}
+
+
+input WorkspaceInput {
+    name: String!
+    ownerId: String!
+    description: String
+}
+
+input ProjectInput {
+    name: String!
+    description: String
+    color: Int
+    workspaceId: String
+}
+
+input TaskInput {
+    description: String
+    name: String
+    projectId: String
+}
+
+input TimeEntryInput {
+    duration: Int
+    endDate: String
+    startDate: String
+}
+
+input UserInput {
+    username: String!
+    name: String
+    email: String!
+}

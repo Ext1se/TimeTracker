@@ -1,0 +1,70 @@
+sudo: required
+language: android
+jdk: oraclejdk8
+env:
+  global:
+  - ADB_INSTALL_TIMEOUT=10 #default 2 mins for emulator
+  - secure: "JPJcjePsL0i9Kh48kOIG9Q5H8gUKZHJ/3dcVUgrYSdE3bS5UqiBwJn7vsktw7kULAHvvBC+D4qYZEd65Z8WeqUqRJZ+WLfAmY+CWnOVtlSb7Gjso0LJW15cXO1un+Qmk1BAHlRB8di/v1GAgLJqFo3p1EXy8sk0qYR55GmsYoJ+XdoJ30/3TCyPtwVVYW6soygyrEGfNKjxDR1ZMf+PTyUt9cDDJ85AfycUEeUDTWrXtbwXBNYEsVo3fubvulWAqtuW4tsjEWdS9L1i5qE3BfQfvcETbW/Qb6No6WaG8FqDwzC+LXbmk5nIE5I/1S3Wu6tOb3IAOFqdGnEn+knkkDJBxunMOMDAnyAAAACdrsj92bd7h/Kq2V6vShnhSjqPpSQgR8KdO/iljtNyqzIYD8Lnx/2By1WXPK+bim+YMIZUuf3ZBllrYnql2d6Veay29C4aEGBZHs+Re/8N5tnC7X4yPW9JpoT+pAR6/62MaxsA0qienuo+G6l+a77y1eudasMEp9OoAAsAZPz41OMuaeRx1WaXpTSBZMH5KFa7tH1xWkAy5LNRsDFOEHrAeykiamUHaAl+6UXXCvQaoEek5m1/KjMjjKCNtxq+/LfUm9nmyDNyUsXimTiSImWlHV64zSIUeU/ykJVnQUpjY+gP1r9AEwp/Fm0DwJpA88sHBP28=" # GH_TOKEN
+branches:
+  only:
+  - master
+  - base-app
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+  - "$HOME/.android/build-cache"
+android:
+  components:
+  - tools
+  - platform-tools
+  - tools
+  - build-tools-25.0.3
+  - android-25
+  - android-22
+  - extra-android-m2repository
+  - extra-android-support
+  - extra-google-m2repository
+  - extra-google-android-support
+  - extra-google-google_play_services
+  - sys-img-armeabi-v7a-android-22
+  licenses:
+  - android-sdk-preview-license-.+
+  - android-sdk-license-.+
+  - google-gdk-license-.+
+install:
+  #Starts an emulator for instrumental tests
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a -c 32M
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+  - chmod +x ./TimeTracker/gradlew
+  - chmod +x ./autobuild/tags.sh
+before_script:
+  - cd TimeTracker
+  - pwd
+script:
+  #Deletes and clean the build directory
+  - ./gradlew clean
+  #Assembles all Debug builds (builds apk).
+  - ./gradlew assembleDebug
+  #Runs all device checks on currently connected devices (instrumentation tests + UI)
+  #- ./gradlew connectedCheck 
+before_deploy:
+  - cd app/build/outputs/apk
+  - mv app-debug.apk TimeTracker.apk
+  - cd -
+  - cd ..
+  - ./autobuild/tags.sh
+deploy:
+  provider: releases
+  api_key:
+    secure: "QVlRbTxOwiSpYVduAt3T8/z1bUA7NCg+j8+3sZ6K91ploOqMS5j1HCfTgskd114pdi2+xZLXHKN3WGHMzL8EExD0Wsjh7sv9PHRdTKes8tySCK6hE4yxgB3wv3+BNEP61p9yub85qJli+KNlOBIi3NZ2ps/a1Bdj57bWXigPlnBYtM9eBIsAbmq82x8IkBWljtp8J9TJ21lQX181G9Etbj+6GdQUnEhaRBTOWcF5h08QPBbk6S2B28eQl+WDJxigioCYscAT2UT8GqA1x004t8mmaw6H57c64GZLzgQaHUUeJYU2FL1Q59U/eRrBfEqQwYJ1ZZ62KeQO6ZxIunkxNWfOFh1UhfByT/XiM87NjVOWwYhELrGA9YH52VNN1MgkHMvakS9Eb68Pxk1NYfDa6KeGuuaVfvxDswqhgw1EjsIWfP6eUgXozHSDIDifhBgDSbHOON2mP8OjJnJBQHRx60uh3nI8/3u9NQ47cbhhT0wEgEuKZ6nWLt60unb46M3C9Ca8ETLxY49MSbS+VO0Vv+pITczVkjl4QxfwEZaA0P4+CG7B+BrZSrFdctOBxxLFiZUSJNfKYR09eHl5kENoNp6tDMEiemMJ4F+Ml1mLKzBnlATpNuua3s1aNq73yEFElHHbmEVRPkCMEkMP2Nt7M8PJjcbnLvISypXZB9o/fOM="
+  file: TimeTracker/app/build/outputs/apk/TimeTracker.apk
+  overwrite: true
+  skip_cleanup: true
+  on:
+    all_branches: true
